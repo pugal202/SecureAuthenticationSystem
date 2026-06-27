@@ -15,7 +15,7 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 
 # PostgreSQL
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:Pugal%401234@localhost:5432/secure_auth_db"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Upload Configuration
