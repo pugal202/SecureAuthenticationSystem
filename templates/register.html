@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}
+Register
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-5">
+
+            <div class="card shadow p-4">
+
+                <h2 class="text-center mb-4">Register</h2>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ 'success' if category=='success' else 'danger' }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <form method="POST">
+
+                    <!-- Username -->
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="username"
+                            required>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input
+                            type="email"
+                            class="form-control"
+                            name="email"
+                            required>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+
+                        <div class="input-group">
+
+                            <input
+                                type="password"
+                                class="form-control"
+                                id="password"
+                                name="password"
+                                required>
+
+                            <button
+                                class="btn btn-outline-secondary"
+                                type="button"
+                                onclick="togglePassword('password')">
+
+                                👁
+
+                            </button>
+
+                        </div>
+
+                        <small class="text-muted">
+                            Password must contain at least:
+                            <br>
+                            • 8 characters
+                            <br>
+                            • One uppercase letter
+                            <br>
+                            • One lowercase letter
+                            <br>
+                            • One number
+                            <br>
+                            • One special character
+                        </small>
+
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="mb-3">
+                        <label class="form-label">Confirm Password</label>
+
+                        <div class="input-group">
+
+                            <input
+                                type="password"
+                                class="form-control"
+                                id="confirm_password"
+                                name="confirm_password"
+                                required>
+
+                            <button
+                                class="btn btn-outline-secondary"
+                                type="button"
+                                onclick="togglePassword('confirm_password')">
+
+                                👁
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary w-100">
+
+                        Register
+
+                    </button>
+
+                </form>
+
+                <p class="text-center mt-3">
+
+                    Already have an account?
+
+                    <a href="{{ url_for('auth.login') }}">
+                        Login
+                    </a>
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function togglePassword(id){
+
+    let input = document.getElementById(id);
+
+    if(input.type === "password"){
+        input.type = "text";
+    }
+    else{
+        input.type = "password";
+    }
+
+}
+
+</script>
+
+{% endblock %}

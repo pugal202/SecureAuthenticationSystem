@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-5">
+
+            <div class="card shadow p-4">
+
+                <h2 class="text-center mb-4">Login</h2>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ 'success' if category=='success' else 'danger' }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <form method="POST">
+
+                    <!-- Email -->
+                    <div class="mb-3">
+
+                        <label class="form-label">Email</label>
+
+                        <input
+                            type="email"
+                            class="form-control"
+                            name="email"
+                            required>
+
+                    </div>
+
+                    <!-- Password -->
+                    <div class="mb-3">
+
+                        <label class="form-label">Password</label>
+
+                        <div class="input-group">
+
+                            <input
+                                type="password"
+                                class="form-control"
+                                id="password"
+                                name="password"
+                                required>
+
+                            <button
+                                class="btn btn-outline-secondary"
+                                type="button"
+                                onclick="togglePassword()">
+
+                                👁
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="btn btn-success w-100">
+
+                        Login
+
+                    </button>
+
+                </form>
+
+                <!-- Forgot Password -->
+                <div class="text-center mt-3">
+
+                    <a href="{{ url_for('auth.forgot_password') }}">
+                        Forgot Password?
+                    </a>
+
+                </div>
+
+                <!-- Register -->
+                <p class="text-center mt-3">
+
+                    Don't have an account?
+
+                    <a href="{{ url_for('auth.register') }}">
+                        Register
+                    </a>
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function togglePassword(){
+
+    let password = document.getElementById("password");
+
+    if(password.type === "password"){
+        password.type = "text";
+    }else{
+        password.type = "password";
+    }
+
+}
+
+</script>
+
+{% endblock %}

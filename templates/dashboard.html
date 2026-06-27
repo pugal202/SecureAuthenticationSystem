@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-6">
+
+            <div class="card shadow-lg p-5">
+
+                <!-- Profile Image -->
+                <div class="text-center mb-3">
+
+                    <img src="{{ url_for('static', filename='uploads/' + user.profile_image) }}"
+                         class="rounded-circle shadow"
+                         width="150"
+                         height="150"
+                         style="object-fit: cover; border:4px solid #0d6efd;">
+
+                </div>
+
+                <h2 class="text-center mb-4">
+                    🔐 Secure Authentication System
+                </h2>
+
+                <hr>
+
+                <h4 class="text-center">
+                    👋 Welcome, {{ user.username }}
+                </h4>
+
+                <br>
+
+                <p>
+                    <strong>👤 Username:</strong>
+                    {{ user.username }}
+                </p>
+
+                <p>
+                    <strong>📧 Email:</strong>
+                    {{ user.email }}
+                </p>
+
+                <p>
+                    <strong>🆔 User ID:</strong>
+                    {{ user.id }}
+                </p>
+
+                <p class="text-success">
+                    <strong>🟢 Status:</strong>
+                    Logged In
+                </p>
+
+                <div class="d-grid gap-2">
+
+                    <a href="{{ url_for('auth.edit_profile') }}"
+                       class="btn btn-primary">
+                        ✏️ Edit Profile
+                    </a>
+
+                    <a href="{{ url_for('auth.change_password') }}"
+                       class="btn btn-warning">
+                        🔑 Change Password
+                    </a>
+
+                    <a href="{{ url_for('auth.logout') }}"
+                       class="btn btn-danger">
+                        🚪 Logout
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

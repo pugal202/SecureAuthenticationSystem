@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}
+Edit Profile
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-6">
+
+            <div class="card shadow-lg p-4">
+
+                <h2 class="text-center mb-4">
+                    ✏️ Edit Profile
+                </h2>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ 'success' if category=='success' else 'danger' }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <!-- IMPORTANT -->
+                <form method="POST" enctype="multipart/form-data">
+
+                    <!-- Current Profile Picture -->
+                    <div class="text-center mb-4">
+
+                        <img src="{{ url_for('static', filename='uploads/' + user.profile_image) }}"
+                             class="rounded-circle"
+                             width="150"
+                             height="150"
+                             style="object-fit: cover; border:3px solid #0d6efd;">
+
+                    </div>
+
+                    <!-- Upload New Image -->
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Profile Picture
+                        </label>
+
+                        <input
+                            type="file"
+                            class="form-control"
+                            name="profile_image"
+                            accept=".jpg,.jpeg,.png">
+
+                    </div>
+
+                    <!-- Username -->
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Username
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="username"
+                            value="{{ user.username }}"
+                            required>
+
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            class="form-control"
+                            name="email"
+                            value="{{ user.email }}"
+                            required>
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="btn btn-success w-100">
+
+                        💾 Update Profile
+
+                    </button>
+
+                </form>
+
+                <a
+                    href="{{ url_for('auth.dashboard') }}"
+                    class="btn btn-secondary w-100 mt-3">
+
+                    ⬅ Back to Dashboard
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
