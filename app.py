@@ -40,6 +40,10 @@ db.init_app(app)
 bcrypt.init_app(app)
 mail.init_app(app)
 
+print("MAIL SERVER:", app.config["MAIL_SERVER"])
+print("MAIL PORT:", app.config["MAIL_PORT"])
+print("MAIL USER:", app.config["MAIL_USERNAME"])
+
 # Register Blueprint
 app.register_blueprint(auth)
 
