@@ -16,16 +16,15 @@ from utils.validators import validate_password
 from utils.token_utils import generate_token, verify_token
 from utils.email_utils import send_verification_email
 from werkzeug.utils import secure_filename
-
 import os
 
 auth = Blueprint("auth", __name__)
+
 
 # ---------------- HOME ----------------
 @auth.route("/")
 def home():
     return redirect(url_for("auth.login"))
-
 
 
 # ---------------- REGISTER ----------------
@@ -73,24 +72,27 @@ def register():
         db.session.add(user)
         db.session.commit()
 
-        # Generate Email Verification Token
-        token = generate_token(user.email)
+        # ==========================
+        # EMAIL VERIFICATION
+        # ==========================
 
-        # Verification Link
-        verification_link = url_for(
-            "auth.verify_email",
-            token=token,
-            _external=True
-        )
+        # Uncomment these lines after fixing Flask-Mail on Render
 
-        # Send Email
-        send_verification_email(
-            user.email,
-            verification_link
-        )
+        # token = generate_token(user.email)
+
+        # verification_link = url_for(
+        #     "auth.verify_email",
+        #     token=token,
+        #     _external=True
+        # )
+
+        # send_verification_email(
+        #     user.email,
+        #     verification_link
+        # )
 
         flash(
-            "Registration successful! Please verify your email before logging in.",
+            "Registration Successful!",
             "success"
         )
 
@@ -145,13 +147,13 @@ def login():
 
         user = User.query.filter_by(email=email).first()
 
-        # Check Email Verification
-        if user and not user.email_verified:
-            flash(
-                "Please verify your email before logging in.",
-                "warning"
-            )
-            return redirect(url_for("auth.login"))
+        # Temporarily disable email verification
+           # if user and not user.email_verified:
+        #     flash(
+        #         "Please verify your email before logging in.",
+        #         "warning"
+        #     )
+        #     return redirect(url_for("auth.login"))
 
         if user and bcrypt.check_password_hash(
             user.password,
@@ -237,6 +239,7 @@ def edit_profile():
         user=user
     )
 
+
 # ---------------- CHANGE PASSWORD ----------------
 @auth.route("/change-password", methods=["GET", "POST"])
 def change_password():
@@ -253,37 +256,39 @@ def change_password():
         new_password = request.form["new_password"]
         confirm_password = request.form["confirm_password"]
 
-        # Verify Current Password
-        if not bcrypt.check_password_hash(user.password, current_password):
+        if not bcrypt.check_password_hash(
+            user.password,
+            current_password
+        ):
             flash("Current password is incorrect!", "danger")
             return redirect(url_for("auth.change_password"))
 
-        # Confirm Password
         if new_password != confirm_password:
             flash("New passwords do not match!", "danger")
             return redirect(url_for("auth.change_password"))
 
-        # Strong Password Validation
         error = validate_password(new_password)
 
         if error:
             flash(error, "danger")
             return redirect(url_for("auth.change_password"))
 
-        # Hash Password
         user.password = bcrypt.generate_password_hash(
             new_password
         ).decode("utf-8")
 
         db.session.commit()
 
-        flash("Password changed successfully!", "success")
+        flash(
+            "Password changed successfully!",
+            "success"
+        )
+
         return redirect(url_for("auth.dashboard"))
 
     return render_template("change_password.html")
 
-
-# ---------------- FORGOT PASSWORD ----------------
+   # ---------------- FORGOT PASSWORD ----------------
 @auth.route("/forgot-password", methods=["GET", "POST"])
 def forgot_password():
 
@@ -297,24 +302,27 @@ def forgot_password():
             flash("No account found with this email!", "danger")
             return redirect(url_for("auth.forgot_password"))
 
-        # Generate Reset Token
-        token = generate_token(user.email)
+        # ===========================================
+        # EMAIL RESET TEMPORARILY DISABLED
+        # Uncomment after fixing Flask-Mail
+        # ===========================================
 
-        reset_link = url_for(
-            "auth.reset_password",
-            token=token,
-            _external=True
-        )
+        # token = generate_token(user.email)
 
-        # Send Reset Email
-        send_verification_email(
-            user.email,
-            reset_link
-        )
+        # reset_link = url_for(
+        #     "auth.reset_password",
+        #     token=token,
+        #     _external=True
+        # )
+
+        # send_verification_email(
+        #     user.email,
+        #     reset_link
+        # )
 
         flash(
-            "Password reset link has been sent to your email.",
-            "success"
+            "Password reset feature is temporarily disabled.",
+            "warning"
         )
 
         return redirect(url_for("auth.login"))
@@ -343,14 +351,12 @@ def reset_password(token):
         password = request.form["password"]
         confirm_password = request.form["confirm_password"]
 
-        # Confirm Password
         if password != confirm_password:
             flash("Passwords do not match!", "danger")
             return redirect(
                 url_for("auth.reset_password", token=token)
             )
 
-        # Strong Password Validation
         error = validate_password(password)
 
         if error:
@@ -359,7 +365,6 @@ def reset_password(token):
                 url_for("auth.reset_password", token=token)
             )
 
-        # Update Password
         user.password = bcrypt.generate_password_hash(
             password
         ).decode("utf-8")
@@ -385,6 +390,9 @@ def logout():
 
     session.clear()
 
-    flash("Logged out successfully!", "success")
+    flash(
+        "Logged out successfully!",
+        "success"
+    )
 
-    return redirect(url_for("auth.login"))
+    return redirect(url_for("auth.login")) 
