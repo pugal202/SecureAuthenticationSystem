@@ -21,6 +21,12 @@ import os
 
 auth = Blueprint("auth", __name__)
 
+# ---------------- HOME ----------------
+@auth.route("/")
+def home():
+    return redirect(url_for("auth.login"))
+
+
 
 # ---------------- REGISTER ----------------
 @auth.route("/register", methods=["GET", "POST"])
